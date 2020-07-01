@@ -18,10 +18,12 @@ io.on('connection', (socket) => {
   console.log(`current client count: ${io.engine.clientsCount}`)
   socket.on('joining game', ()=>{
     // console.log('right here', currentState)
-    currentState && io.emit('newState', currentState)
+    console.log('getting "joining game" event')
+    io.emit('joiningGameState', currentState)
   })
   socket.on('newState', (newState) => {
-    console.log('newState: ' + JSON.stringify(newState));
+    // console.log('newState: ' + JSON.stringify(newState));
+    console.log('"newState" event received');
     currentState = {...newState};
     io.emit('newState', newState);
     // socket.on('chat message', (msg) => {
@@ -31,6 +33,10 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected');
     console.log(`current client count: ${io.engine.clientsCount}`)
+    if (io.engine.clientsCount === 0){
+      console.log('no clients, game reset')
+      currentState = null;
+    }
   });
 });
 
