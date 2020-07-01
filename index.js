@@ -12,14 +12,17 @@ app.use(async ctx => {
 });
 
 io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
-        io.emit('chat message', msg);
-      });
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-      });
+  // console.log('a user connected');
+  socket.on('newState', (newState) => {
+    console.log('newState: ' + JSON.stringify(newState));
+    io.emit('newState', newState);
+    // socket.on('chat message', (msg) => {
+    //   console.log('message: ' + msg);
+    //   io.emit('chat message', msg);
+  });
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
 });
 
 console.log(`listening on port ${port}`)
